@@ -2,7 +2,7 @@ package com.caixaverso.model;
 
 public enum VehicleStatus {
 
-    AVAIABLE,
+    AVAILABLE,
     RENTED,
     UNDER_MAINTENANCE
 }
