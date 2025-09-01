@@ -50,9 +50,9 @@ public class UsuarioResource {
         if (senhaIgual) {
             String token = UUID.randomUUID().toString();
 
-            ApiKeys.API_KEYS.add(token);
+            ApiKeys.API_KEYS.put(token, usuario.getPapel());
 
-            return Response.ok(Map.of("token", token)).build();
+            return Response.ok(Map.of("token", token, "role", usuario.getPapel().name())).build();
         }
 
         return Response.status(Response.Status.FORBIDDEN).build();

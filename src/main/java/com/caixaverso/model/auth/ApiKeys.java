@@ -2,9 +2,9 @@ package com.caixaverso.model.auth;
 
 import io.vertx.core.impl.ConcurrentHashSet;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ApiKeys {
-    public static final Set<String> API_KEYS = new ConcurrentHashSet<>();
+    public static final Map<String, Papeis> API_KEYS = new ConcurrentHashMap<>();
 }
