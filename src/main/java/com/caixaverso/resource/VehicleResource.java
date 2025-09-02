@@ -5,6 +5,7 @@ import com.caixaverso.model.Accessory;
 import com.caixaverso.model.Maintenance;
 import com.caixaverso.model.Vehicle;
 import io.quarkus.panache.common.Parameters;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -23,6 +24,7 @@ public class VehicleResource {
 
     @POST
     @Transactional
+    @RolesAllowed({"admin", "user"})
     public Response create(CreateVehicleRequest request) {
 
         Vehicle vehicle = new Vehicle(request.model(), request.year(), request.engine(), request.brand());

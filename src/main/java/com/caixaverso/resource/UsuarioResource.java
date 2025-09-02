@@ -1,16 +1,20 @@
 package com.caixaverso.resource;
 
-import com.caixaverso.model.auth.ApiKeys;
 import com.caixaverso.model.auth.BCryptAdapter;
 import com.caixaverso.model.auth.Usuario;
 import io.quarkus.panache.common.Parameters;
+import io.smallrye.jwt.build.Jwt;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.jwt.Claims;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Path("/api/v1/auth")
@@ -48,11 +52,15 @@ public class UsuarioResource {
         Boolean senhaIgual = BCryptAdapter.checkPassword(dto.senha, usuario.getSenha());
 
         if (senhaIgual) {
-            String token = UUID.randomUUID().toString();
 
-            ApiKeys.API_KEYS.put(token, usuario.getPapel());
+            String tokenJwt = Jwt.claims()
+                    .issuer("caixaverso.ada.tech/")
+                    .expiresAt(Instant.now().plus(5, ChronoUnit.MINUTES))
+                    .groups(Set.of(usuario.getPapel().name()))
+                    .claim(Claims.upn, usuario.getId())
+                    .sign();
 
-            return Response.ok(Map.of("token", token, "role", usuario.getPapel().name())).build();
+            return Response.ok(Map.of("token", tokenJwt)).build();
         }
 
         return Response.status(Response.Status.FORBIDDEN).build();
