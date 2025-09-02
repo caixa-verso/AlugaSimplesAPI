@@ -19,12 +19,12 @@ import java.util.Optional;
 @Path("api/v1/vehicles")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@RolesAllowed({"admin", "user"})
 public class VehicleResource {
 
 
     @POST
     @Transactional
-    @RolesAllowed({"admin", "user"})
     public Response create(CreateVehicleRequest request) {
 
         Vehicle vehicle = new Vehicle(request.model(), request.year(), request.engine(), request.brand());
